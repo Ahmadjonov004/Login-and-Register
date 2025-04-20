@@ -3,7 +3,7 @@ import { Link} from "react-router-dom";
 const Home = () => {
   return (
     <div className="w-full flex items-center justify-center min-h-screen ">
-      <div className="bg-blue shadow-2xl rounded-2xl p-5 md:p-10 w-full max-w-md text-center space-y-7">
+      <div className="bg-blue shadow-2xl rounded-2xl p-5 md:p-10 w-full max-w-md text-center space-y-7 mx-[10px] ">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Xush kelibsiz!</h1>
         <p className="text-gray-500 text-sm md:text-base">
           Iltimos, davom etish uchun quyidagi tugmalardan birini tanlang.
