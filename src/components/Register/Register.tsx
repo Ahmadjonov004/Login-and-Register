@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import loginImg from "../../assets/images/loginImg.png";
+// import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
+  // const navigate = useNavigate();
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -10,7 +12,7 @@ const Register: React.FC = () => {
     email: "",
     password: "",
   });
-
+  
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -23,7 +25,7 @@ const Register: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://onlyauth.pythonanywhere.com/auth/register/",
+        "https://onlyauth.pythonanywhere.com/register/",
         form
       );
       setMessage("Muvaffaqiyatli ro'yxatdan o'tdingiz");
@@ -41,7 +43,7 @@ const Register: React.FC = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center p-3 md:p-6">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-md p-6 bg-white rounded-2xl shadow-2xl space-y-4"
+          className="w-full max-w-md p-6 bg-white rounded-2xl  space-y-4"
         >
           <h2 className="text-3xl font-bold text-center text-gray-800">
             Ro‘yxatdan o‘tish
@@ -139,7 +141,7 @@ const Register: React.FC = () => {
             Ro‘yxatdan o‘tish
           </button>
         </form>
-        <div className="hidden md:block w-full max-w-[600px] absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
+        <div className="hidden md:block w-full xl:max-w-[600px] max-w-[500px] absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
           <img
             src={loginImg}
             alt="Login"

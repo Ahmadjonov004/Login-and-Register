@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://onlyauth.pythonanywhere.com/api/token/', {
+      const response = await axios.post('https://onlyauth.pythonanywhere.com/token/', {
         username: form.login,
         password: form.password,
       });
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center p-3 md:p-6 ">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-md  p-4 md:p-8 rounded-2xl shadow-lg relative z-10"
+          className="w-full max-w-md  p-4 md:p-8 rounded-2xl  relative z-10"
         >
           <h2 className="text-3xl md:text-5xl font-bold text-center text-[#252525]">Xush kelibsiz!</h2>
           <p className="text-center text-[#4B4B4B] text-[14px] md:text-[16px] font-normal mb-8 md:mb-[50px]">
@@ -76,11 +76,11 @@ const Login: React.FC = () => {
           </button>
         </form>
       </div>
-      <div className="hidden md:block w-full max-w-[600px] absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
+      <div className="hidden xl:max-w-[600px] max-w-[500px]  sm:block w-full  absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
         <img
           src={loginImg}
           alt="Login"
-          className="object-cover w-full h-64 md:h-full"
+          className="object-contain w-full h-64 md:h-full"
         />
       </div>
     </div>

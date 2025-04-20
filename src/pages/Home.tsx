@@ -23,7 +23,6 @@ const Home = () => {
             Ro‘yxatdan o‘tish
           </Link>
         </div>
-        
       </div>
     </div>
   );
