@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer components {
+    .loader {
+      @apply w-[50px] aspect-square grid border-4 border-transparent rounded-full border-r-[#ccc] animate-l16;
+    }
+  
+    .loader::before {
+      content: "";
+      @apply col-start-1 row-start-1 m-[2px] border-4 border-transparent rounded-full border-r-[#f03355] animate-l16rev;
+    }
+  
+    .loader::after {
+      content: "";
+      @apply col-start-1 row-start-1 m-[8px] border-4 border-transparent rounded-full;
+    }
+  }

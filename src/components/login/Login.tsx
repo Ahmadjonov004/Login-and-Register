@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import loginImg from '../../assets/images/loginImg.png'; 
 import { FaRegEye } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import Loader from '../../loader/Loader';
 
 const Login: React.FC = () => {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState<string | null>(null);
-  const [access, setAccess] = useState<string | null>(null)
+  const [access] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+ const navigate = useNavigate();
   const togglePassword =()=> {
     setShowPassword(!showPassword);
   }
@@ -19,6 +23,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post('https://onlyauth.pythonanywhere.com/token/', {
         username: form.username,
@@ -26,11 +31,14 @@ const Login: React.FC = () => {
       });
       localStorage.setItem('access', response.data.access);
       localStorage.setItem('refresh', response.data.refresh);
-      setAccess("Mufaqqiyatli O'tdingiz")
       setError('');
+      setTimeout(()=> {
+        navigate("/dashboard")
+      }, 500)
 
     } catch (err) {
       setError("Login yoki parol noto‘g‘ri");
+      setIsLoading(false);
     }
   };
 
@@ -38,7 +46,12 @@ const Login: React.FC = () => {
     <div className="flex min-h-screen realtive">
       
       <div className="md:w-1/2 w-full flex items-center justify-center p-3 md:p-6 ">
-        <form
+      {isLoading ? (
+          <div className="flex justify-center items-center w-full h-full">
+            <Loader/>
+          </div>
+        ) : (
+          <form
           onSubmit={handleSubmit}
           className="w-full max-w-md  p-4 md:p-8 rounded-2xl "
         >
@@ -85,9 +98,11 @@ const Login: React.FC = () => {
             Kirish
           </button>
         </form>
+        )}
       </div>
       <div className="hidden xl:max-w-[600px] max-w-[500px]  sm:block w-full  absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
-        <img
+      
+         <img
           src={loginImg}
           alt="Login"
           className="object-contain w-full h-64 md:h-full"
