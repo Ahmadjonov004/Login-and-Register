@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import loginImg from '../../assets/images/loginImg.png'; 
+import { FaRegEye } from 'react-icons/fa';
 
 const Login: React.FC = () => {
-  const [form, setForm] = useState({ login: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ username: '', password: '' });
+  const [error, setError] = useState<string | null>(null);
+  const [access, setAccess] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword =()=> {
+    setShowPassword(!showPassword);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,11 +21,12 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://onlyauth.pythonanywhere.com/token/', {
-        username: form.login,
+        username: form.username,
         password: form.password,
       });
       localStorage.setItem('access', response.data.access);
       localStorage.setItem('refresh', response.data.refresh);
+      setAccess("Mufaqqiyatli O'tdingiz")
       setError('');
 
     } catch (err) {
@@ -32,7 +40,7 @@ const Login: React.FC = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center p-3 md:p-6 ">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-md  p-4 md:p-8 rounded-2xl  relative z-10"
+          className="w-full max-w-md  p-4 md:p-8 rounded-2xl "
         >
           <h2 className="text-3xl md:text-5xl font-bold text-center text-[#252525]">Xush kelibsiz!</h2>
           <p className="text-center text-[#4B4B4B] text-[14px] md:text-[16px] font-normal mb-8 md:mb-[50px]">
@@ -43,30 +51,32 @@ const Login: React.FC = () => {
             <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">Login</label>
             <input
               type="text"
-              name="login"
-              value={form.login}
+              name="username"
+              value={form.username}
               onChange={handleChange}
               placeholder="Loginingizni kiriting"
               required
               className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
             />
+            
           </div>
 
-          <div className='mb-[30px] md:mb-[40px]'>
+          <div className='mb-[30px] md:mb-[40px] relative'>
             <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">Parol</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="Parolingizni kiriting"
               required
-              className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-
+              className=" w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
             />
+            <FaRegEye className='absolute top-[52px] right-4 ' onClick={togglePassword}/>
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
+          {access && <p className="text-green-500 text-sm">{access}</p>}
 
           <button
             type="submit"

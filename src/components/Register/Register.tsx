@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import loginImg from "../../assets/images/loginImg.png";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { FaRegEye } from "react-icons/fa";
 
 const Register: React.FC = () => {
-  // const navigate = useNavigate();
+
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -15,6 +17,11 @@ const Register: React.FC = () => {
   
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  
+    const togglePassword =()=> {
+      setShowPassword(!showPassword);
+    }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,13 +29,14 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     try {
       const response = await axios.post(
         "https://onlyauth.pythonanywhere.com/register/",
         form
       );
       setMessage("Muvaffaqiyatli ro'yxatdan o'tdingiz");
+      navigate('/login')
       setError("");
       console.log("Success:", response.data);
     } catch (err: any) {
@@ -113,12 +121,12 @@ const Register: React.FC = () => {
             </div>
           </div>
 
-          <div className="mb-[15px] md:mb-[20px]">
+          <div className="mb-[15px] md:mb-[20px] relative">
             <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
               Parol
             </label>
             <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             name="password"
             placeholder="Parol"
             value={form.password}
@@ -126,6 +134,7 @@ const Register: React.FC = () => {
             required
             className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
           />
+          <FaRegEye className='absolute top-[52px] right-4 ' onClick={togglePassword}/>
           </div>
          
 
