@@ -85,7 +85,7 @@ const Login: React.FC = () => {
               required
               className=" w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
             />
-            <FaRegEye className='absolute top-[52px] right-4 ' onClick={togglePassword}/>
+            <FaRegEye className='absolute top-[48px] md:top-[54px] right-4 ' onClick={togglePassword}/>
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
         </form>
         )}
       </div>
-      <div className="hidden xl:max-w-[600px] max-w-[500px]  sm:block w-full  absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
+      <div className="hidden xl:max-w-[600px] max-w-[500px]  md:block w-full  absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
       
          <img
           src={loginImg}
