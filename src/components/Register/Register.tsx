@@ -3,10 +3,9 @@ import axios from "axios";
 import loginImg from "../../assets/images/loginImg.png";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye } from "react-icons/fa";
-import Loader from "../../loader/Loader";
+import Loader from "../../utils/loader/Loader";
 
 const Register: React.FC = () => {
-
   const navigate = useNavigate();
   const [form, setForm] = useState({
     first_name: "",
@@ -15,38 +14,82 @@ const Register: React.FC = () => {
     email: "",
     password: "",
   });
-  
+  const [errors, setErrors] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
-    const togglePassword =()=> {
-      setShowPassword(!showPassword);
-    }
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors((prev) => ({
+      ...prev,
+      [e.target.name]: "",
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors = {
+      first_name: "",
+      last_name: "",
+      username: "",
+      email: "",
+      password: "",
+    };
+    let hasError = false;
+
+    if(!form.username.trim()){
+      newErrors.username = 'Username kiriting';
+      hasError = true;
+    }
+    if(!form.password.trim()){
+      newErrors.password = 'Parolni kiriting';
+      hasError = true;
+    }
+    if(!form.first_name.trim()){
+      newErrors.first_name = 'Ismingizni kiriting';
+      hasError = true;
+    }
+    if(!form.last_name.trim()){
+      newErrors.last_name = 'Familiyangizni kiriting';
+      hasError = true;
+    }
+    if(!form.email.trim()){
+      newErrors.email = 'Emailni kiriting';
+      hasError = true;
+    }
+    if(hasError){
+      setErrors(newErrors);
+      return;
+    }
+    setError(null);
+
     setIsLoading(true);
     try {
       const response = await axios.post(
         "https://onlyauth.pythonanywhere.com/register/",
         form
       );
-      
-       setMessage("Muvaffaqiyatli ro'yxatdan o'tdingiz");
+
+      setMessage("Muvaffaqiyatli ro'yxatdan o'tdingiz");
       setError("");
       console.log("Success:", response.data);
 
       setTimeout(() => {
-        navigate("/login")
+        navigate("/login");
       }, 500);
-
-
     } catch (err: any) {
       setError("Ro'yxatdan o‘tishda xatolik yuz berdi");
       setMessage("");
@@ -57,119 +100,117 @@ const Register: React.FC = () => {
 
   return (
     <div className="flex min-h-screen relative">
-      <div className="md:w-1/2 w-full flex items-center justify-center p-3 md:p-6">
-        {isLoading ? (
-          <div className="flex justify-center items-center w-full h-full">
-            <Loader/>
+      <div className="lg:w-1/2 w-full flex items-center justify-center p-3 md:p-6">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md p-6 bg-white rounded-2xl  space-y-4"
+        >
+          <h2 className="text-3xl font-bold text-center text-gray-800">
+            Ro‘yxatdan o‘tish
+          </h2>
+          <p className="text-center text-gray-500 text-sm">
+            Kerakli maʼlumotlarni kiriting
+          </p>
+
+          <div className="mb-[15px] md:mb-[20px]">
+            <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[5px] md:mb-[9px]">
+              Ismingiz
+            </label>
+            <input
+              type="text"
+              name="first_name"
+              placeholder="Ismingiz"
+              value={form.first_name}
+              onChange={handleChange}
+              className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+            />
+            {errors.first_name && <p className="text-red-500">{errors.first_name}</p>}
           </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-md p-6 bg-white rounded-2xl  space-y-4"
-          >
-            <h2 className="text-3xl font-bold text-center text-gray-800">
-              Ro‘yxatdan o‘tish
-            </h2>
-            <p className="text-center text-gray-500 text-sm">
-              Kerakli maʼlumotlarni kiriting
-            </p>
 
-            <div className="mb-[15px] md:mb-[20px]">
-              <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
-                Ismingiz
+          <div className="mb-[15px] md:mb-[20px]">
+            <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[5px] md:mb-[9px]">
+              Familiyangiz
+            </label>
+            <input
+              type="text"
+              name="last_name"
+              placeholder="Familiyangiz"
+              value={form.last_name}
+              onChange={handleChange}
+              className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+            />
+            {errors.last_name && <p className="text-red-500">{errors.last_name}</p>}
+          </div>
+
+          <div className="flex justify-center items-center gap-[20px]">
+            <div>
+              <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[5px] md:mb-[9px]">
+                Username
               </label>
               <input
                 type="text"
-                name="first_name"
-                placeholder="Ismingiz"
-                value={form.first_name}
+                name="username"
+                placeholder="Username"
+                value={form.username}
                 onChange={handleChange}
-                required
                 className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
+              {errors.username && <p className="text-red-500">{errors.username}</p>}
             </div>
-
-            <div className="mb-[15px] md:mb-[20px]">
-              <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
-                Familiyangiz
+            <div>
+              <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[5px] md:mb-[9px]">
+                Email
               </label>
               <input
-                type="text"
-                name="last_name"
-                placeholder="Familiyangiz"
-                value={form.last_name}
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={form.email}
                 onChange={handleChange}
-                required
                 className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
+              {errors.email && <p className="text-red-500">{errors.email}</p>}
             </div>
+          </div>
 
-            <div className="flex justify-center items-center gap-[20px]">
-              <div>
-                <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  value={form.username}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                />
-              </div>
-              <div>
-                <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                />
-              </div>
+          <div className="mb-[15px] md:mb-[20px] relative">
+            <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
+              Parol
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Parol"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+            />
+            {errors.password && <p className="text-red-500">{errors.password}</p>}
+            <FaRegEye
+              className="absolute top-[48px] md:top-[54px] right-4 cursor-pointer"
+              onClick={togglePassword}
+            />
+          </div>
+
+          {message && (
+            <p className="text-green-600 text-sm text-center">{message}</p>
+          )}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {isLoading ? (
+            <div className="flex justify-center items-center w-full h-full">
+              <Loader />
             </div>
-
-            <div className="mb-[15px] md:mb-[20px] relative">
-              <label className="flex justify-start text-[16px] md:text-[18px] font-medium text-[#252525] mb-[9px]">
-                Parol
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Parol"
-                value={form.password}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-[10px] md:py-[12px] border-none text-[16px] font-normal bg-[#F9F8FA] rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-              />
-              <FaRegEye
-                className="absolute top-[52px] right-4 cursor-pointer"
-                onClick={togglePassword}
-              />
-            </div>
-
-            {message && (
-              <p className="text-green-600 text-sm text-center">{message}</p>
-            )}
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
-            )}
-
+          ) : (
             <button
               type="submit"
               className="w-full py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl font-semibold transition"
             >
               Ro‘yxatdan o‘tish
             </button>
-          </form>
-        )}
-        <div className="hidden md:block w-full xl:max-w-[600px] max-w-[500px] absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
+          )}
+        </form>
+
+        <div className="hidden lg:block w-full xl:max-w-[600px] max-w-[500px] absolute  top-[50px] right-[50px] bottom-[50px] z-9 ">
           <img
             src={loginImg}
             alt="Login"
