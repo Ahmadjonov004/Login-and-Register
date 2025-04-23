@@ -78,7 +78,7 @@ const Login: React.FC = () => {
           <h2 className="text-3xl md:text-5xl font-bold text-center text-[#252525]">
             Xush kelibsiz!
           </h2>
-          <p className="text-center text-[#4B4B4B] text-[14px] md:text-[16px] font-normal mb-8 md:mb-[50px]">
+          <p className="text-center text-[#4B4B 4B] text-[14px] md:text-[16px] font-normal mb-8 md:mb-[50px]">
             Login parolingizni kiriting o‘z kabinetingizga kiring.
           </p>
 
